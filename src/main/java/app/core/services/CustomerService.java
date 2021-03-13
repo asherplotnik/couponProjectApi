@@ -89,7 +89,7 @@ public class CustomerService extends ClientService{
 	}
 	
 	public List<Coupon> getAvailableCouponsforCustomer() {
-		return couponRepository.findByCustomersIdIsNullOrCustomersIdNot(customerId);
+		return couponRepository.getAvailableCoupons(customerId);
 	}
 	
 	

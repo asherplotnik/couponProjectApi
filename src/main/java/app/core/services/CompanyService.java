@@ -47,6 +47,7 @@ public class CompanyService extends ClientService{
 		Company company =  getCompanyDetails();
 		company.addCoupon(coupon);
 		coupon.setId(couponRepository.getCouponByTitleAndCompanyId(coupon.getTitle(), companyId).getId());
+		coupon.setCompany(company);
 		return coupon;
 	}
 	

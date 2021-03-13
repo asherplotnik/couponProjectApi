@@ -41,7 +41,7 @@ public class AdminController {
 		try {
 			return getService(token).addCompany(company);
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT,"failed to add - company invalid");			
+			throw new ResponseStatusException(HttpStatus.CONFLICT,e.getLocalizedMessage());			
 		}
 	}
 	

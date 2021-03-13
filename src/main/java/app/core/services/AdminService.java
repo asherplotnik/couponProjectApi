@@ -39,10 +39,10 @@ public class AdminService extends ClientService {
 			}
 			String check = checkDuplicateCompany(company);
 			if (check.equals("name")) {
-				throw new DaoException("Company name exists already!!!");
+				throw new DaoException("Failed to add - Company name exists already!!!");
 			}
 			if (check.equals("email")) {
-				throw new DaoException("Company email exists already!!!");
+				throw new DaoException("Failed to add - Company email exists already!!!");
 			}
 			System.out.println("Company saved Successfully");
 			return companyRepository.save(company);

@@ -61,8 +61,8 @@ public class CustomerController {
 		return getService(token).getCustomerCouponsByCategory(id);
 	}
 
-	@GetMapping("/getCustomerCouponsByMaxPrice/{id}")
-	public List<Coupon> getCustomerCouponsByMaxPrice(@RequestHeader String token, @PathVariable int max) {
+	@GetMapping("/getCustomerCouponsByMaxPrice/{max}")
+	public List<Coupon> getCustomerCouponsByMaxPrice(@RequestHeader String token, @PathVariable double max) {
 		return getService(token).getCustomerCouponsByMaxPrice(max);
 	}
 	
