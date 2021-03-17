@@ -35,7 +35,7 @@ public class LoginController {
 			session.setAttribute("service", service );
 			return session.token;
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"login failed password or email invalid");
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"LOGIN FAILED - Password or email invalid");
 		}
 	}
 
