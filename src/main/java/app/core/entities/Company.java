@@ -32,6 +32,8 @@ public class Company {
 	@JsonIgnore
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Coupon> coupons;
+	
+	
 	public Company(int id, String name, String email, String password) {
 		this.id = id;
 		this.name = name;
