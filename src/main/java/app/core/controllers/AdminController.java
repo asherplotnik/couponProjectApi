@@ -27,115 +27,119 @@ import app.core.sessions.SessionContext;
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
-	
+
 	@Autowired
 	private SessionContext sessionContext;
-	
+
 	private AdminService getService(String token) {
 		Session session = sessionContext.getSession(token);
-		return (AdminService)session.getAttribute("service");
+		return (AdminService) session.getAttribute("service");
 	}
-	
+
 	@PostMapping("/addCompany")
-	public Company addCompany(@RequestHeader String token , @RequestBody Company company) {
+	public Company addCompany(@RequestHeader String token, @RequestBody Company company) {
 		try {
 			return getService(token).addCompany(company);
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT,e.getLocalizedMessage());			
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
-	
+
 	@PostMapping("/updateCompany")
 	public Company updateCompany(@RequestHeader String token, @RequestBody Company company) {
 		try {
-			return getService(token).updateCompany(company);			
+			return getService(token).updateCompany(company);
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT,e.getLocalizedMessage());
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
-	
+
+	@PostMapping("/updateCustomer")
+	public Customer updateCustomer(@RequestHeader String token, @RequestBody Customer customer) {
+		try {
+			return getService(token).updateCustomer(customer);
+		} catch (DaoException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
+		}
+	}
+
 	@DeleteMapping("/deleteCompany/{companyId}")
 	public Company deleteCompany(@RequestHeader String token, @PathVariable int companyId) {
 		try {
 			return getService(token).deleteCompany(companyId);
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT,e.getLocalizedMessage());
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
-	
+
 	@GetMapping("/getAllCompanies")
 	public List<Company> getAllCompanies(@RequestHeader String token) {
 		return getService(token).getAllCompanies();
 	}
-	
+
 	@GetMapping("getCompany/{companyId}")
 	public Company getCompany(@RequestHeader String token, @PathVariable int companyId) {
 		try {
 			Company company = getService(token).getOneCompany(companyId);
-			return  company;
+			return company;
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.NO_CONTENT,e.getLocalizedMessage());
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
-	
+
 	@GetMapping("getCompanyCoupons/{companyId}")
 	public List<Coupon> getCompanyCoupons(@RequestHeader String token, @PathVariable int companyId) {
 		try {
 			return getService(token).getCompanyCoupons(companyId);
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.NO_CONTENT,e.getLocalizedMessage());
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
-	
+
 	@PostMapping("/addCustomer")
 	public Customer addCustomer(@RequestHeader String token, @RequestBody Customer customer) {
 		try {
 			return getService(token).addCustomer(customer);
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT,e.getLocalizedMessage());		
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
-	
-	@PostMapping("/updateCustomer")
-	public Customer updateCustomer(@RequestHeader String token, @RequestBody Customer customer) {
-		try {
-			return getService(token).updateCustomer(customer);			
-		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT,e.getLocalizedMessage());
-		}
-	}
-	
+
 	@DeleteMapping("/deleteCustomer/{customerId}")
 	public Customer deleteCustomer(@RequestHeader String token, @PathVariable int customerId) {
 		try {
 			return getService(token).deleteCustomer(customerId);
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT,e.getLocalizedMessage());
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
-	
+
 	@GetMapping("/getAllCustomers")
 	public List<Customer> getAllCustomers(@RequestHeader String token) {
-		return getService(token).getAllCustomers();
+		try {
+			return getService(token).getAllCustomers();
+		} catch (DaoException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
+		}
 	}
-	
+
 	@GetMapping("getCustomer/{customerId}")
 	public Customer getCustomer(@RequestHeader String token, @PathVariable int customerId) {
 		try {
 			Customer customer = getService(token).getOneCustomer(customerId);
 			return customer;
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT,e.getLocalizedMessage());
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
+
 	@GetMapping("getCustomerCoupons/{customerId}")
 	public List<Coupon> getCustomerCoupons(@RequestHeader String token, @PathVariable int customerId) {
 		try {
 			return getService(token).getCustomerCoupons(customerId);
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT,e.getLocalizedMessage());
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
-	
-	
+
 }

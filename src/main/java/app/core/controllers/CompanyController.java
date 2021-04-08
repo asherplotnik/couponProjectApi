@@ -25,72 +25,85 @@ import app.core.sessions.SessionContext;
 @RequestMapping("/api/company")
 @CrossOrigin(origins = "http://localhost:3000")
 public class CompanyController {
-	
+
 	@Autowired
 	private SessionContext sessionContext;
-	
+
 	private CompanyService getService(String token) {
 		Session session = sessionContext.getSession(token);
-		return (CompanyService)session.getAttribute("service");
+		return (CompanyService) session.getAttribute("service");
 	}
-	
+
 	@GetMapping("/getCompanyDetails")
 	public Company getCompanyDetails(@RequestHeader String token) {
 		try {
 			return getService(token).getCompanyDetails();
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT,e.getLocalizedMessage());
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
-	
+
 	@PostMapping("/addCoupon")
 	public Coupon addCoupon(@RequestHeader String token, @RequestBody Coupon coupon) {
 		try {
 			return getService(token).addCoupon(coupon);
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT,e.getLocalizedMessage());
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
-	
-	
+
 	@DeleteMapping("/deleteCoupon/{couponId}")
 	public Coupon deleteCoupon(@RequestHeader String token, @PathVariable int couponId) {
 		try {
 			return getService(token).deleteCoupon(couponId);
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT,e.getLocalizedMessage());
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
-	
+
 	@PostMapping("/updateCoupon")
 	public Coupon updateCoupon(@RequestHeader String token, @RequestBody Coupon coupon) {
 		try {
 			return getService(token).updateCoupon(coupon);
 		} catch (DaoException e) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT,e.getLocalizedMessage());
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
-	
-	
+
 	@GetMapping("/getCompanyCouponById/{id}")
-	public Coupon getCompanyCouponById(@RequestHeader String token, @PathVariable int id ) {
-		return getService(token).getCompanyCouponById(id);
+	public Coupon getCompanyCouponById(@RequestHeader String token, @PathVariable int id) {
+		try {
+			return getService(token).getCompanyCouponById(id);
+		} catch (DaoException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
+		}
 	}
-	
+
 	@GetMapping("/getCompanyCoupons")
 	public List<Coupon> getCompanyCoupons(@RequestHeader String token) {
-		return getService(token).getCompanyCoupons();
+		try {
+			return getService(token).getCompanyCoupons();
+		} catch (DaoException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
+		}
 	}
-	
+
 	@GetMapping("/getCompanyCouponsByCategory/{id}")
 	public List<Coupon> getCompanyCouponsByCategory(@RequestHeader String token, @PathVariable int id) {
-		return getService(token).getCompanyCouponsByCategory(id);
+		try {
+			return getService(token).getCompanyCouponsByCategory(id);
+		} catch (DaoException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
+		}
 	}
 
 	@GetMapping("/getCompanyCouponsByMaxPrice/{max}")
 	public List<Coupon> getCompanyCouponsByMaxPrice(@RequestHeader String token, @PathVariable double max) {
-		return getService(token).getCompanyCouponsByMaxPrice(max);
+		try {
+			return getService(token).getCompanyCouponsByMaxPrice(max);
+		} catch (DaoException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
+		}
 	}
-	
-	
+
 }

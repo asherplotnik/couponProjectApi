@@ -15,26 +15,31 @@ import app.core.entities.Customer;
 @Transactional
 public class AdminService extends ClientService {
 	private boolean loggedIn = false;
-	
+
 //	public AdminService(String email, String password) throws DaoException {
 //		if (!login(email,password)) {
 //			throw new DaoException("Login admin failed!!!");
 //		}
 //	}
 
-	public AdminService( ) {
+	public AdminService() {
 	}
-	
-	public boolean login(String email, String password) {
-		if (email.equals("admin@admin.com") && password.equals("admin")) {
-			loggedIn = true;
-			return true;
-		} else {
-			return false;
+
+	public boolean login(String email, String password) throws DaoException {
+		try {
+			if (email.equals("admin@admin.com") && password.equals("admin")) {
+				loggedIn = true;
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			throw new DaoException("Login Failed  !!!");
 		}
 	}
 
 	public Company addCompany(Company company) throws DaoException {
+		try {
 			if (company.getName().length() == 0 || company.getEmail().length() == 0) {
 			}
 			String check = checkDuplicateCompany(company);
@@ -46,6 +51,9 @@ public class AdminService extends ClientService {
 			}
 			System.out.println("Company saved Successfully");
 			return companyRepository.save(company);
+		} catch (Exception e) {
+			throw new DaoException("Failed to add !!!");
+		}
 	}
 
 	private String checkDuplicateCompany(Company company) {
@@ -61,38 +69,21 @@ public class AdminService extends ClientService {
 		return "ok";
 	}
 
-	public Company updateCompany(Company company) throws DaoException {
-		System.out.println(company);
-		Optional<Company> opt = companyRepository.findById(company.getId());
-		if (opt.isEmpty()) {
-			throw new DaoException("Update Failed - company not found");
-		}
-		Company companyDb = opt.get();
-		if (!companyDb.getName().equals(company.getName())) {
-			throw new DaoException("Can not change company name !!!");
-		}
-		// check if found other company with same email but different id
-		Company dupCompany = companyRepository.getByEmail(company.getEmail());
-		if (dupCompany != null && dupCompany.getId() != company.getId()) {
-			throw new DaoException("Can not change company email - duplicate email found!!!");
-		}
-		companyDb.setEmail(company.getEmail());
-		companyDb.setPassword(company.getPassword());
-		System.out.println("Company updated Successfully");
-		return companyDb;
-	}
-
 	public Company deleteCompany(int id) throws DaoException {
-		// database foreign key restrictions on delete cascade will automatically delete
-		// all coupons and all purchases
-		// with permission from Eldar
-		Optional<Company> temp = companyRepository.findById(id);
-		if (temp.isEmpty()) {
-			throw new DaoException("failed to delete - company id not found");
+		try {
+			// database foreign key restrictions on delete cascade will automatically delete
+			// all coupons and all purchases
+			// with permission from Eldar
+			Optional<Company> temp = companyRepository.findById(id);
+			if (temp.isEmpty()) {
+				throw new DaoException("failed to delete - company id not found");
+			}
+			companyRepository.deleteById(id);
+			System.out.println("Company deleted Successfully");
+			return temp.get();
+		} catch (Exception e) {
+			throw new DaoException("Failed to Delete !!!");
 		}
-		companyRepository.deleteById(id);
-		System.out.println("Company deleted Successfully");
-		return temp.get();
 	}
 
 	public List<Company> getAllCompanies() {
@@ -100,83 +91,140 @@ public class AdminService extends ClientService {
 	}
 
 	public Company getOneCompany(int id) throws DaoException {
-		Optional<Company> opt = companyRepository.findById(id);
-		if (opt.isPresent()) {
-			return opt.get();
-		} else {
-			throw new DaoException("Company does not exists");
-		}		
+		try {
+			Optional<Company> opt = companyRepository.findById(id);
+			if (opt.isPresent()) {
+				return opt.get();
+			} else {
+				throw new DaoException("Company does not exists");
+			}
+		} catch (Exception e) {
+			throw new DaoException("Failed to get company !!!");
+		}
 	}
-	
+
 	public List<Coupon> getCompanyCoupons(int id) throws DaoException {
-		List<Coupon> list = couponRepository.getCouponsByCompanyId(id);
-		if (list.size() > 0) {
-			return list;					
-		} else {
-			throw new DaoException("coupon list is empty");
+		try {
+			List<Coupon> list = couponRepository.getCouponsByCompanyId(id);
+			if (list.size() > 0) {
+				return list;
+			} else {
+				throw new DaoException("coupon list is empty");
+			}
+		} catch (Exception e) {
+			throw new DaoException("Failed to get Coupons !!!");
 		}
 	}
 
 	public Customer addCustomer(Customer customer) throws DaoException {
-		if (customerRepository.getByEmail(customer.getEmail()) == null) {
-			System.out.println("Customer added successfuly.");
-			return customerRepository.save(customer);
-		} else {
-			throw new DaoException("Customer's email exists already!!!");
+		try {
+			if (customerRepository.getByEmail(customer.getEmail()) == null) {
+				System.out.println("Customer added successfuly.");
+				return customerRepository.save(customer);
+			} else {
+				throw new DaoException("Customer's email exists already!!!");
+			}
+		} catch (Exception e) {
+			throw new DaoException("Failed to add Customer !!!");
+		}
+	}
+
+	public Company updateCompany(Company company) throws DaoException {
+		try {
+			System.out.println(company);
+			Optional<Company> opt = companyRepository.findById(company.getId());
+			if (opt.isEmpty()) {
+				throw new DaoException("Update Failed - company not found");
+			}
+			Company companyDb = opt.get();
+			if (!companyDb.getName().equals(company.getName())) {
+				throw new DaoException("Can not change company name !!!");
+			}
+			// check if found other company with same email but different id
+			Company dupCompany = companyRepository.getByEmail(company.getEmail());
+			if (dupCompany != null && dupCompany.getId() != company.getId()) {
+				throw new DaoException("Can not change company email - duplicate email found!!!");
+			}
+			companyDb.setEmail(company.getEmail());
+			companyDb.setPassword(company.getPassword());
+			System.out.println("Company updated Successfully");
+			return companyDb;
+		} catch (Exception e) {
+			throw new DaoException("Failed to update Company !!!");
 		}
 	}
 
 	public Customer updateCustomer(Customer customer) throws DaoException {
-		Optional<Customer> opt = customerRepository.findById(customer.getId());
-		if (opt.isEmpty()) {
-			throw new DaoException("Update Failed - customer not found");
+		try {
+			Optional<Customer> opt = customerRepository.findById(customer.getId());
+			if (opt.isEmpty()) {
+				throw new DaoException("Update Failed - customer not found");
+			}
+			Customer customerDb = opt.get();
+			// check if found other customer with same email but different id
+			Customer dupEmailCustomer = customerRepository.getByEmail(customer.getEmail());
+			if (dupEmailCustomer != null && dupEmailCustomer.getId() != customer.getId()) {
+				throw new DaoException("Customer's email exists already!!!");
+			}
+			customerDb.setFirst_name(customer.getFirst_name());
+			customerDb.setLast_name(customer.getLast_name());
+			customerDb.setEmail(customer.getEmail());
+			customerDb.setPassword(customer.getPassword());
+			System.out.println("Customer updated successfuly.");
+			return customerDb;
+		} catch (Exception e) {
+			throw new DaoException("Failed to update Customer !!!");
 		}
-		Customer customerDb = opt.get();
-		// check if found other customer with same email but different id
-		Customer dupEmailCustomer = customerRepository.getByEmail(customer.getEmail());
-		if (dupEmailCustomer != null && dupEmailCustomer.getId() != customer.getId()) {
-			throw new DaoException("Customer's email exists already!!!");
-		}
-		customerDb.setFirst_name(customer.getFirst_name());
-		customerDb.setLast_name(customer.getLast_name());
-		customerDb.setEmail(customer.getEmail());
-		customerDb.setPassword(customer.getPassword());
-		System.out.println("Customer updated successfuly.");
-		return customerDb;
 	}
 
 	public Customer deleteCustomer(int id) throws DaoException {
-		// database foreign key restrictions on delete cascade will automatically delete
-		// all purchases
-		// with permission of Eldar
-		Optional<Customer> temp = customerRepository.findById(id);
-		if (temp.isEmpty()) {
-			throw new DaoException("Delete Failed - Customer not found");
-		}
-		customerRepository.deleteById(id);
-		System.out.println("Customer deleted successfuly.");
-		return temp.get();
-	}
-
-	public List<Customer> getAllCustomers() {
-		return customerRepository.findAll();
-	}
-
-	public Customer getOneCustomer(int id) throws DaoException{
-		Optional<Customer> opt = customerRepository.findById(id);
-		if (opt.isPresent()) {
-			return opt.get();
-		} else {
-			throw new DaoException("Customer does not exists");
+		try {
+			// database foreign key restrictions on delete cascade will automatically delete
+			// all purchases
+			// with permission of Eldar
+			Optional<Customer> temp = customerRepository.findById(id);
+			if (temp.isEmpty()) {
+				throw new DaoException("Delete Failed - Customer not found");
+			}
+			customerRepository.deleteById(id);
+			System.out.println("Customer deleted successfuly.");
+			return temp.get();
+		} catch (Exception e) {
+			throw new DaoException("Failed to delete customer !!!");
 		}
 	}
-	
+
+	public List<Customer> getAllCustomers() throws DaoException {
+		try {
+			return customerRepository.findAll();
+		} catch (Exception e) {
+			throw new DaoException("Failed to get customers !!!");
+		}
+	}
+
+	public Customer getOneCustomer(int id) throws DaoException {
+		try {
+			Optional<Customer> opt = customerRepository.findById(id);
+			if (opt.isPresent()) {
+				return opt.get();
+			} else {
+				throw new DaoException("Customer does not exists");
+			}
+		} catch (Exception e) {
+			throw new DaoException("Failed to get customer !!!");
+		}
+	}
+
 	public List<Coupon> getCustomerCoupons(int id) throws DaoException {
-		List<Coupon> list = couponRepository.getCouponsByCustomersId(id);
-		if (list.size() > 0) {
-			return list;					
-		} else {
-			throw new DaoException("coupon list is empty");
+		try {
+			List<Coupon> list = couponRepository.getCouponsByCustomersId(id);
+			if (list.size() > 0) {
+				return list;
+			} else {
+				throw new DaoException("coupon list is empty");
+			}
+		} catch (Exception e) {
+			throw new DaoException("Failed to get customer coupons !!!");
 		}
 	}
 
@@ -185,6 +233,6 @@ public class AdminService extends ClientService {
 	}
 
 	public String getAdminDetails() {
-			return ("ADMIN");
+		return ("ADMIN");
 	}
 }
