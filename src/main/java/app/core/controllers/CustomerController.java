@@ -85,5 +85,14 @@ public class CustomerController {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
+	
+	@GetMapping("/getCustomerCoupon/{id}")
+	public Coupon getCustomerCoupon(@RequestHeader String token, @PathVariable int id) {
+		try {
+			return getService(token).getCustomerCouponById(id);
+		} catch (DaoException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
+		}
+	}
 
 }

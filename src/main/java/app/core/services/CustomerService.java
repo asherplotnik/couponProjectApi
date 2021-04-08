@@ -66,13 +66,13 @@ public class CustomerService extends ClientService {
 		}
 	}
 
-	public Coupon getCouponById(int id) throws DaoException {
+	public Coupon getCustomerCouponById(int id) throws DaoException {
 		try {
-			Optional<Coupon> opt = couponRepository.findById(id);
-			if (opt.isPresent()) {
-				return opt.get();
+			Optional<Coupon> opt = couponRepository.findByIdAndCustomersId(id,getCustomerDetails().getId());
+			if (opt.isEmpty()) {
+				throw new DaoException("Coupon not found.");
 			}
-			return null;
+			return opt.get();
 		} catch (Exception e) {
 			throw new DaoException("get coupon failed !!!");
 		}

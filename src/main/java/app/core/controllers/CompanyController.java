@@ -105,5 +105,14 @@ public class CompanyController {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
+	
+	@GetMapping("/getCompanyCoupon/{id}")
+	public Coupon getCompanyCoupon(@RequestHeader String token, @PathVariable int id) {
+		try {
+			return getService(token).getCompanyCouponById(id);
+		} catch (DaoException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
+		}
+	}
 
 }

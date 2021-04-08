@@ -126,10 +126,13 @@ public class CompanyService extends ClientService {
 
 	public Coupon getCompanyCouponById(int couponId) throws DaoException {
 		try {
-			Coupon coupon = couponRepository.getCouponByIdAndCompanyId(couponId, companyId);
-			return coupon;
+			Optional<Coupon> opt = couponRepository.getCouponByIdAndCompanyId(couponId, companyId);
+			if (opt.isEmpty()) {
+				throw new DaoException("coupon notfound ");
+			}
+			return opt.get();
 		} catch (Exception e) {
-			throw new DaoException("get coupons failed !!!");
+			throw new DaoException("get coupon failed !!!");
 		}
 	}
 
@@ -160,5 +163,6 @@ public class CompanyService extends ClientService {
 			throw new DaoException("get company failed !!!");
 		}
 	}
+	
 
 }
