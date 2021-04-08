@@ -62,7 +62,7 @@ public class CustomerService extends ClientService {
 			System.out.println("Purchased coupon successfully !");
 			return temp;
 		} catch (Exception e) {
-			throw new DaoException("Purchase coupon failed !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -74,7 +74,7 @@ public class CustomerService extends ClientService {
 			}
 			return opt.get();
 		} catch (Exception e) {
-			throw new DaoException("get coupon failed !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -82,7 +82,7 @@ public class CustomerService extends ClientService {
 		try {
 			return couponRepository.getCouponsByCustomersId(customerId);
 		} catch (Exception e) {
-			throw new DaoException("Get customer coupons failed !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -90,7 +90,7 @@ public class CustomerService extends ClientService {
 		try {
 			return couponRepository.getCouponsByCustomersIdAndCategoryId(customerId, categoryId);
 		} catch (Exception e) {
-			throw new DaoException("Get customer coupons by category failed !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -98,7 +98,7 @@ public class CustomerService extends ClientService {
 		try {
 			return couponRepository.getCouponsByCustomersIdAndPriceLessThan(customerId, maxPrice);
 		} catch (Exception e) {
-			throw new DaoException("Get customer coupons by price failed !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -111,7 +111,7 @@ public class CustomerService extends ClientService {
 				throw new DaoException("error");
 			}
 		} catch (Exception e) {
-			throw new DaoException("Get customer failed !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -119,7 +119,7 @@ public class CustomerService extends ClientService {
 		try {
 			return couponRepository.getAvailableCoupons(customerId);
 		} catch (Exception e) {
-			throw new DaoException("Get Available Coupons for Customer failed !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 

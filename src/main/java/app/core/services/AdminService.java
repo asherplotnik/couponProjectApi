@@ -52,7 +52,7 @@ public class AdminService extends ClientService {
 			System.out.println("Company saved Successfully");
 			return companyRepository.save(company);
 		} catch (Exception e) {
-			throw new DaoException("Failed to add !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -82,7 +82,7 @@ public class AdminService extends ClientService {
 			System.out.println("Company deleted Successfully");
 			return temp.get();
 		} catch (Exception e) {
-			throw new DaoException("Failed to Delete !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -99,7 +99,7 @@ public class AdminService extends ClientService {
 				throw new DaoException("Company does not exists");
 			}
 		} catch (Exception e) {
-			throw new DaoException("Failed to get company !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -112,7 +112,7 @@ public class AdminService extends ClientService {
 				throw new DaoException("coupon list is empty");
 			}
 		} catch (Exception e) {
-			throw new DaoException("Failed to get Coupons !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -125,7 +125,7 @@ public class AdminService extends ClientService {
 				throw new DaoException("Customer's email exists already!!!");
 			}
 		} catch (Exception e) {
-			throw new DaoException("Failed to add Customer !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -150,7 +150,7 @@ public class AdminService extends ClientService {
 			System.out.println("Company updated Successfully");
 			return companyDb;
 		} catch (Exception e) {
-			throw new DaoException("Failed to update Company !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -173,7 +173,7 @@ public class AdminService extends ClientService {
 			System.out.println("Customer updated successfuly.");
 			return customerDb;
 		} catch (Exception e) {
-			throw new DaoException("Failed to update Customer !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -190,7 +190,7 @@ public class AdminService extends ClientService {
 			System.out.println("Customer deleted successfuly.");
 			return temp.get();
 		} catch (Exception e) {
-			throw new DaoException("Failed to delete customer !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -211,7 +211,7 @@ public class AdminService extends ClientService {
 				throw new DaoException("Customer does not exists");
 			}
 		} catch (Exception e) {
-			throw new DaoException("Failed to get customer !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 
@@ -224,7 +224,7 @@ public class AdminService extends ClientService {
 				throw new DaoException("coupon list is empty");
 			}
 		} catch (Exception e) {
-			throw new DaoException("Failed to get customer coupons !!!");
+			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
 

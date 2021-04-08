@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ import app.core.entities.Coupon;
 import app.core.services.CompanyService;
 import app.core.sessions.Session;
 import app.core.sessions.SessionContext;
+import app.core.utils.Payload;
 
 @RestController
 @RequestMapping("/api/company")
@@ -43,10 +45,19 @@ public class CompanyController {
 		}
 	}
 
-	@PostMapping("/addCoupon")
-	public Coupon addCoupon(@RequestHeader String token, @RequestBody Coupon coupon) {
+//	@PostMapping("/addCoupon")
+//	public Coupon addCoupon(@RequestHeader String token, @RequestBody Coupon coupon) {
+//		try {
+//			return getService(token).addCoupon(coupon);
+//		} catch (DaoException e) {
+//			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
+//		}
+//	}
+
+	@PostMapping(path = "/addCoupon", consumes = { "multipart/form-data" })
+	public Coupon addCoupon(@RequestHeader String token, @ModelAttribute Payload payload) {
 		try {
-			return getService(token).addCoupon(coupon);
+			return getService(token).addCoupon(payload);
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
@@ -105,7 +116,7 @@ public class CompanyController {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
-	
+
 	@GetMapping("/getCompanyCoupon/{id}")
 	public Coupon getCompanyCoupon(@RequestHeader String token, @PathVariable int id) {
 		try {
