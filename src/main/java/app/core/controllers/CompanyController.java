@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,9 +72,9 @@ public class CompanyController {
 	}
 
 	@PostMapping("/updateCoupon")
-	public Coupon updateCoupon(@RequestHeader String token, @RequestBody Coupon coupon) {
+	public Coupon updateCoupon(@RequestHeader String token, @ModelAttribute Payload payload) {
 		try {
-			return getService(token).updateCoupon(coupon);
+			return getService(token).updateCoupon(payload);
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}

@@ -24,7 +24,7 @@ public class AdminService extends ClientService {
 
 	public AdminService() {
 	}
-
+	@Override
 	public boolean login(String email, String password) throws DaoException {
 		try {
 			if (email.equals("admin@admin.com") && password.equals("admin")) {

@@ -33,7 +33,7 @@ public class CompanyService extends ClientService {
 	private String imgbbApiKey;
 	public CompanyService() {
 	}
-
+	@Override
 	public boolean login(String email, String password) throws DaoException {
 		try {
 			Company comp = companyRepository.getByEmail(email);
@@ -54,6 +54,9 @@ public class CompanyService extends ClientService {
 	public Coupon addCoupon(Payload payload) throws DaoException {
 		try {
 			String imageUrl = uploadImageToImgbb(payload.getImageFile());
+			if (imageUrl==null) {
+				throw new DaoException("Upload image failed!!!");
+			}
 			Coupon coupon = new Coupon(); 
 			coupon.setId(payload.getId());	
 			coupon.setTitle(payload.getTitle());	
@@ -84,29 +87,46 @@ public class CompanyService extends ClientService {
 			throw new DaoException(e.getLocalizedMessage());
 		}
 	}
-//	public Coupon addCoupon(Coupon coupon) throws DaoException {
-//		try {
-//			if (couponRepository.getFirstByTitleAndCompanyId(coupon.getTitle(), companyId).isPresent()) {
-//				throw new DaoException("Add coupon failed. Duplicate title for same company!!!");
-//			}
-//			if (coupon.getCategoryId() <= 0 || coupon.getCategoryId() > CategoryEnum.values().length) {
-//				System.out.println(coupon.getCategoryId());
-//				throw new DaoException(
-//						"Add coupon failed. Category id out of range!!! (" + coupon.getCategoryId() + ")");
-//			}
-//			if (coupon.getStartDate().isAfter(coupon.getEndDate())) {
-//				throw new DaoException("Add coupon failed. Coupon end date before coupon start date!!!");
-//			}
-//			Company company = getCompanyDetails();
-//			company.addCoupon(coupon);
-//			coupon.setId(couponRepository.getCouponByTitleAndCompanyId(coupon.getTitle(), companyId).getId());
-//			coupon.setCompany(company);
-//			return coupon;
-//		} catch (Exception e) {
-//			throw new DaoException("Add coupon failed !!!");
-//		}
-//	}
 
+	public Coupon updateCoupon(Payload payload) throws DaoException {
+		try {
+			String imageUrl = uploadImageToImgbb(payload.getImageFile());
+			Coupon couponDb;
+			Optional<Coupon> co = couponRepository.findById(payload.getId());
+			if (co.isEmpty()) {
+				throw new DaoException("failed to update - Coupon dont exist");
+			} else {
+				couponDb = co.get();
+				if (couponDb.getCompany().getId() != companyId) {
+					throw new DaoException("failed to update - Coupon belong to different company");
+				}
+			}
+			couponDb.setCategoryId(payload.getCategoryId());
+			couponDb.setTitle(payload.getTitle());
+			couponDb.setDescription(payload.getDescription());
+			couponDb.setStartDate(LocalDate.parse(payload.getStartDate())); 
+			couponDb.setEndDate(LocalDate.parse(payload.getEndDate())); 
+			couponDb.setPrice(payload.getPrice());
+			couponDb.setAmount(payload.getAmount());
+			if (imageUrl!=null)
+				couponDb.setImage(imageUrl);
+			Optional<Coupon> duplicate = couponRepository.getFirstByTitleAndCompanyId(couponDb.getTitle(), companyId);
+			if (duplicate.isPresent() && duplicate.get().getId() != couponDb.getId()) {
+				throw new DaoException("Update coupon failed. Duplicate title for same company!!!");
+			}
+
+			if (couponDb.getCategoryId() <= 0 || couponDb.getCategoryId() > CategoryEnum.values().length) {
+				throw new DaoException("Update coupon failed - Category id out of range!!!");
+			}
+			if (couponDb.getStartDate().isAfter(couponDb.getEndDate())) {
+				throw new DaoException("Update coupon failed - Coupon end date before coupon start date!!!");
+			}
+			return couponDb;
+		} catch (Exception e) {
+			throw new DaoException(e.getLocalizedMessage());
+		}
+	}
+	
 	public Coupon deleteCoupon(int id) throws DaoException {
 		try {
 			// database foreign key restrictions on delete cascade will automatically delete
@@ -120,43 +140,6 @@ public class CompanyService extends ClientService {
 			} else {
 				throw new DaoException("Delete coupon Failed - Coupon not found for this company");
 			}
-		} catch (Exception e) {
-			throw new DaoException(e.getLocalizedMessage());
-		}
-	}
-
-	public Coupon updateCoupon(Coupon coupon) throws DaoException {
-		try {
-			Coupon couponDb;
-			Optional<Coupon> co = couponRepository.findById(coupon.getId());
-			if (co.isEmpty()) {
-				throw new DaoException("failed to update - Coupon dont exist");
-			} else {
-				couponDb = co.get();
-				if (couponDb.getCompany().getId() != companyId) {
-					throw new DaoException("failed to update - Coupon belong to different company");
-				}
-			}
-			Optional<Coupon> duplicate = couponRepository.getFirstByTitleAndCompanyId(coupon.getTitle(), companyId);
-			if (duplicate.isPresent() && duplicate.get().getId() > coupon.getId()) {
-				throw new DaoException("Update coupon failed. Duplicate title for same company!!!");
-			}
-
-			if (coupon.getCategoryId() <= 0 || coupon.getCategoryId() != CategoryEnum.values().length) {
-				throw new DaoException("Update coupon failed - Category id out of range!!!");
-			}
-			if (coupon.getStartDate().isAfter(coupon.getEndDate())) {
-				throw new DaoException("Update coupon failed - Coupon end date before coupon start date!!!");
-			}
-			couponDb.setCategoryId(coupon.getCategoryId());
-			couponDb.setTitle(coupon.getTitle());
-			couponDb.setDescription(coupon.getDescription());
-			couponDb.setStartDate(coupon.getStartDate());
-			couponDb.setEndDate(coupon.getEndDate());
-			couponDb.setPrice(coupon.getPrice());
-			couponDb.setAmount(coupon.getAmount());
-			couponDb.setImage(coupon.getImage());
-			return couponDb;
 		} catch (Exception e) {
 			throw new DaoException(e.getLocalizedMessage());
 		}

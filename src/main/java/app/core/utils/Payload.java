@@ -3,7 +3,6 @@ package app.core.utils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Payload implements Serializable {
 	

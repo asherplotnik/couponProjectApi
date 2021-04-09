@@ -20,6 +20,7 @@ public class CustomerService extends ClientService {
 	public CustomerService() {
 	}
 
+	@Override
 	public boolean login(String email, String password) throws DaoException {
 		try {
 			Customer cust = customerRepository.getByEmail(email);
