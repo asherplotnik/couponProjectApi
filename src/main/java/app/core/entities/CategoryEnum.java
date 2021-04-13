@@ -10,7 +10,7 @@ package app.core.entities;
 public enum CategoryEnum {
 			FOOD,
 			MOVIE,
-			ELECTRICITY,
+			DISCOUNT,
 			RESTAURANT,
 			VACATION
 }

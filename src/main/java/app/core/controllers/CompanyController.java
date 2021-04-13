@@ -44,15 +44,6 @@ public class CompanyController {
 		}
 	}
 
-//	@PostMapping("/addCoupon")
-//	public Coupon addCoupon(@RequestHeader String token, @RequestBody Coupon coupon) {
-//		try {
-//			return getService(token).addCoupon(coupon);
-//		} catch (DaoException e) {
-//			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
-//		}
-//	}
-
 	@PostMapping(path = "/addCoupon", consumes = { "multipart/form-data" })
 	public Coupon addCoupon(@RequestHeader String token, @ModelAttribute Payload payload) {
 		try {
