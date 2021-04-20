@@ -17,9 +17,10 @@ import org.springframework.web.server.ResponseStatusException;
 import app.core.couponProjectExceptions.DaoException;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
+import app.core.security.JwtUtil;
 import app.core.services.CompanyService;
-import app.core.sessions.Session;
-import app.core.sessions.SessionContext;
+//import app.core.sessions.Session;
+//import app.core.sessions.SessionContext;
 import app.core.utils.Payload;
 
 @RestController
@@ -28,11 +29,26 @@ import app.core.utils.Payload;
 public class CompanyController {
 
 	@Autowired
-	private SessionContext sessionContext;
+	private CompanyService companyService;
+	@Autowired
+	JwtUtil jwtUtil;
 
-	private CompanyService getService(String token) {
-		Session session = sessionContext.getSession(token);
-		return (CompanyService) session.getAttribute("service");
+	private CompanyService getService(String token) throws DaoException {
+		try {
+			System.out.println(jwtUtil.isTokenExpired(token));
+			if (!jwtUtil.isTokenExpired(token)) {
+				System.out.println(jwtUtil.extractUserType(token));
+				if (jwtUtil.extractUserType(token) == 1) {
+					System.out.println(jwtUtil.extractId(token));
+					int id = jwtUtil.extractId(token);
+					companyService.setCompanyId(id);
+					return companyService;
+				}
+			}
+			throw new DaoException("You are not logged in !!!");
+		} catch (Exception e) {
+			throw new DaoException("You are not logged in !!!");
+		}
 	}
 
 	@GetMapping("/getCompanyDetails")

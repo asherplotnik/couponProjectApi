@@ -37,6 +37,10 @@ public class CustomerService extends ClientService {
 	public int getCustomerId() {
 		return customerId;
 	}
+	
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
 
 	public Coupon purchaseCoupon(int id) throws DaoException {
 		try {

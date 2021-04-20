@@ -50,6 +50,10 @@ public class CompanyService extends ClientService {
 	public int getCompanyId() {
 		return companyId;
 	}
+	
+	public void setCompanyId(int companyId) {
+		this.companyId=companyId;
+	}
 
 	public Coupon addCoupon(Payload payload) throws DaoException {
 		try {

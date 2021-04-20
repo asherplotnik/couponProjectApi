@@ -15,9 +15,10 @@ import org.springframework.web.server.ResponseStatusException;
 import app.core.couponProjectExceptions.DaoException;
 import app.core.entities.Coupon;
 import app.core.entities.Customer;
+import app.core.security.JwtUtil;
 import app.core.services.CustomerService;
-import app.core.sessions.Session;
-import app.core.sessions.SessionContext;
+//import app.core.sessions.Session;
+//import app.core.sessions.SessionContext;
 
 @RestController
 @RequestMapping("/api/customer")
@@ -25,11 +26,23 @@ import app.core.sessions.SessionContext;
 public class CustomerController {
 
 	@Autowired
-	private SessionContext sessionContext;
+	JwtUtil jwtUtil;
+	@Autowired
+	private CustomerService customerService;
 
-	private CustomerService getService(String token) {
-		Session session = sessionContext.getSession(token);
-		return (CustomerService) session.getAttribute("service");
+	private CustomerService getService(String token) throws DaoException {
+		try {
+			if (!jwtUtil.isTokenExpired(token)) {
+				if (jwtUtil.extractUserType(token) == 2) {
+					int id = jwtUtil.extractId(token);
+					customerService.setCustomerId(id);
+					return customerService;
+				}
+			}
+			throw new DaoException("You are not logged in !!!");
+		} catch (Exception e) {
+			throw new DaoException("You are not logged in !!!");
+		}
 	}
 
 	@GetMapping("/getCustomerDetails")
@@ -85,7 +98,7 @@ public class CustomerController {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
 	}
-	
+
 	@GetMapping("/getCustomerCoupon/{id}")
 	public Coupon getCustomerCoupon(@RequestHeader String token, @PathVariable int id) {
 		try {

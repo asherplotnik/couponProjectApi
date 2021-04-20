@@ -19,9 +19,10 @@ import app.core.couponProjectExceptions.DaoException;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.entities.Customer;
+import app.core.security.JwtUtil;
 import app.core.services.AdminService;
-import app.core.sessions.Session;
-import app.core.sessions.SessionContext;
+//import app.core.sessions.Session;
+//import app.core.sessions.SessionContext;
 
 @CrossOrigin
 @RestController
@@ -29,11 +30,21 @@ import app.core.sessions.SessionContext;
 public class AdminController {
 
 	@Autowired
-	private SessionContext sessionContext;
+	private AdminService adminService;
+	@Autowired
+	JwtUtil jwtUtil;
 
-	private AdminService getService(String token) {
-		Session session = sessionContext.getSession(token);
-		return (AdminService) session.getAttribute("service");
+	private AdminService getService(String token) throws DaoException {
+		try {
+			if (!jwtUtil.isTokenExpired(token)) {
+				if (jwtUtil.extractUserType(token) == 0) {
+					return adminService;
+				}
+			}
+			throw new DaoException("You are not logged in !!!");
+		} catch (Exception e) {
+			throw new DaoException("You are not logged in !!!");
+		}
 	}
 
 	@PostMapping("/addCompany")
@@ -74,7 +85,11 @@ public class AdminController {
 
 	@GetMapping("/getAllCompanies")
 	public List<Company> getAllCompanies(@RequestHeader String token) {
-		return getService(token).getAllCompanies();
+		try {
+			return getService(token).getAllCompanies();
+		} catch (DaoException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
+		}
 	}
 
 	@GetMapping("getCompany/{companyId}")
