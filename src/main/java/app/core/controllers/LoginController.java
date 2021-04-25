@@ -12,28 +12,18 @@ import org.springframework.web.server.ResponseStatusException;
 import app.core.couponProjectExceptions.DaoException;
 import app.core.entities.JsonPassword;
 import app.core.loginManager.LoginManager;
-//import app.core.services.ClientService;
-//import app.core.sessions.Session;
-//import app.core.sessions.SessionContext;
+import app.core.utils.UserPayload;
 @CrossOrigin
 @RestController
 public class LoginController {
 	
-//	@Autowired
-//	private SessionContext sessionContext;
 	@Autowired
 	ApplicationContext ctx; 
-	@PostMapping("/login/{email}/{userType}")
-	public String login(@RequestBody JsonPassword password, @PathVariable String email, @PathVariable int userType) {
+	@PostMapping("/login/{email}")
+	public UserPayload login(@RequestBody JsonPassword password, @PathVariable String email) {
 		LoginManager loginManager = ctx.getBean(LoginManager.class);
-		String  token;
 		try {
-			token = loginManager.login(email, password.password, userType);
-//			Session session = sessionContext.createSession();
-//			session.setAttribute("email", email);
-//			session.setAttribute("usertype", userType );
-//			session.setAttribute("service", service );
-			return token;
+			return loginManager.login(email, password.password);
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"LOGIN FAILED - Password or email invalid");
 		}
