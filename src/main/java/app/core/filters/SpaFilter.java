@@ -24,7 +24,7 @@ public class SpaFilter implements Filter{
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;	
 		String path = req.getRequestURI();
-	    if ("/health".equals(path)) {
+	    if ("/".equals(path)) {
 	    	chain.doFilter(request, response);
 	    	return;
 		} else {
