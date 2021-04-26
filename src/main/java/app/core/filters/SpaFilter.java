@@ -24,10 +24,13 @@ public class SpaFilter implements Filter{
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;	
 		String path = req.getRequestURI();
-	    if ("/".equals(path)) {
+	    System.out.println("out"+ path +"____________________________");
+		if ("/".equals(path)) {
+			System.out.println("if"+ path +"____________________________");
 	    	chain.doFilter(request, response);
 	    	return;
 		} else {
+			System.out.println("else"+ path +"____________________________");
 	    	res.sendRedirect("/");
 	    	chain.doFilter(request, res);
 	    }
