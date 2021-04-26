@@ -25,7 +25,10 @@ public class SpaFilter implements Filter{
 		HttpServletResponse res = (HttpServletResponse) response;	
 		String path = req.getRequestURI();
 	    System.out.println("out"+ path +"____________________________");
-		if ("/".equals(path)) {
+	    if(req.getRequestURI().contains("/static") || req.getRequestURI().contains("/favicon") || req.getRequestURI().contains("/manifest") ) {
+	    	chain.doFilter(request, response);
+	    }
+	    if ("/".equals(path)) {
 			System.out.println("if"+ path +"____________________________");
 	    	chain.doFilter(request, response);
 	    	return;
