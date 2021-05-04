@@ -2,8 +2,6 @@ package app.core;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import app.core.couponProjectExceptions.DaoException;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
