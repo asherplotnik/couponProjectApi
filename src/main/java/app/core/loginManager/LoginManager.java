@@ -26,16 +26,18 @@ public class LoginManager {
 			int userType = checkUser(email, password);
 			switch (userType) {
 			case 0:
-				jwtToken = jwtUtil.generateToken(email, password, 0, 0);
-				return new UserPayload(jwtToken,0);
+				jwtToken = jwtUtil.generateToken(email, "Admin", 0, 0);
+				return new UserPayload(jwtToken,"Admin",0);
 			case 1:
 				// login method set company id if found email and password match
-				jwtToken = jwtUtil.generateToken(email, password, 1, companyService.getCompanyId());
-				return new UserPayload(jwtToken,1);
+				String compName = companyService.getCompanyDetails().getName();
+				jwtToken = jwtUtil.generateToken(email, compName, 1, companyService.getCompanyId());
+				return new UserPayload(jwtToken, compName,1);
 			case 2:
 				// login method set customer id if found email and password match
-				jwtToken = jwtUtil.generateToken(email, password, 2, customerService.getCustomerId());
-				return new UserPayload(jwtToken,2);
+				String custName = customerService.getCustomerDetails().getFirst_name();
+				jwtToken = jwtUtil.generateToken(email, custName, 2, customerService.getCustomerId());
+				return new UserPayload(jwtToken,custName,2);
 			default:
 				throw new DaoException("Login Failed");
 			}
