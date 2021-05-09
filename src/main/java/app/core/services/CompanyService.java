@@ -105,6 +105,7 @@ public class CompanyService extends ClientService {
 					throw new DaoException("failed to update - Coupon belong to different company");
 				}
 			}
+			couponDb.setId(payload.getId());
 			couponDb.setCategoryId(payload.getCategoryId());
 			couponDb.setTitle(payload.getTitle());
 			couponDb.setDescription(payload.getDescription());
