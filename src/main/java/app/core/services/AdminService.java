@@ -86,8 +86,12 @@ public class AdminService extends ClientService {
 		}
 	}
 
-	public List<Company> getAllCompanies() {
-		return companyRepository.findAll();
+	public List<Company> getAllCompanies() throws DaoException {
+		try {
+			return companyRepository.findAll();
+		} catch (Exception e) {
+			throw new DaoException(e.getLocalizedMessage());
+		}
 	}
 
 	public Company getOneCompany(int id) throws DaoException {

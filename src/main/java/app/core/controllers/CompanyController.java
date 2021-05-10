@@ -35,17 +35,9 @@ public class CompanyController {
 
 	private CompanyService getService(String token) throws DaoException {
 		try {
-			System.out.println(jwtUtil.isTokenExpired(token));
-			if (!jwtUtil.isTokenExpired(token)) {
-				System.out.println(jwtUtil.extractUserType(token));
-				if (jwtUtil.extractUserType(token) == 1) {
-					System.out.println(jwtUtil.extractId(token));
-					int id = jwtUtil.extractId(token);
-					companyService.setCompanyId(id);
-					return companyService;
-				}
-			}
-			throw new DaoException("You are not logged in !!!");
+			int id = jwtUtil.extractId(token);
+			companyService.setCompanyId(id);
+			return companyService;
 		} catch (Exception e) {
 			throw new DaoException("You are not logged in !!!");
 		}

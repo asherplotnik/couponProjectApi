@@ -33,23 +33,10 @@ public class AdminController {
 	@Autowired
 	JwtUtil jwtUtil;
 
-	private AdminService getService(String token) throws DaoException {
-		try {
-			if (!jwtUtil.isTokenExpired(token)) {
-				if (jwtUtil.extractUserType(token) == 0) {
-					return adminService;
-				}
-			}
-			throw new DaoException("You are not logged in !!!");
-		} catch (Exception e) {
-			throw new DaoException("You are not logged in !!!");
-		}
-	}
-
 	@PostMapping("/addCompany")
 	public Company addCompany(@RequestHeader String token, @RequestBody Company company) {
 		try {
-			return getService(token).addCompany(company);
+			return adminService.addCompany(company);
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
@@ -58,7 +45,7 @@ public class AdminController {
 	@PostMapping("/updateCompany")
 	public Company updateCompany(@RequestHeader String token, @RequestBody Company company) {
 		try {
-			return getService(token).updateCompany(company);
+			return adminService.updateCompany(company);
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
@@ -67,7 +54,7 @@ public class AdminController {
 	@PostMapping("/updateCustomer")
 	public Customer updateCustomer(@RequestHeader String token, @RequestBody Customer customer) {
 		try {
-			return getService(token).updateCustomer(customer);
+			return adminService.updateCustomer(customer);
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
@@ -76,7 +63,7 @@ public class AdminController {
 	@DeleteMapping("/deleteCompany/{companyId}")
 	public Company deleteCompany(@RequestHeader String token, @PathVariable int companyId) {
 		try {
-			return getService(token).deleteCompany(companyId);
+			return adminService.deleteCompany(companyId);
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
@@ -85,7 +72,7 @@ public class AdminController {
 	@GetMapping("/getAllCompanies")
 	public List<Company> getAllCompanies(@RequestHeader String token) {
 		try {
-			return getService(token).getAllCompanies();
+			return adminService.getAllCompanies();
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
@@ -94,7 +81,7 @@ public class AdminController {
 	@GetMapping("getCompany/{companyId}")
 	public Company getCompany(@RequestHeader String token, @PathVariable int companyId) {
 		try {
-			Company company = getService(token).getOneCompany(companyId);
+			Company company = adminService.getOneCompany(companyId);
 			return company;
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
@@ -104,7 +91,7 @@ public class AdminController {
 	@GetMapping("getCompanyCoupons/{companyId}")
 	public List<Coupon> getCompanyCoupons(@RequestHeader String token, @PathVariable int companyId) {
 		try {
-			return getService(token).getCompanyCoupons(companyId);
+			return adminService.getCompanyCoupons(companyId);
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
@@ -113,7 +100,7 @@ public class AdminController {
 	@PostMapping("/addCustomer")
 	public Customer addCustomer(@RequestHeader String token, @RequestBody Customer customer) {
 		try {
-			return getService(token).addCustomer(customer);
+			return adminService.addCustomer(customer);
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
@@ -122,7 +109,7 @@ public class AdminController {
 	@DeleteMapping("/deleteCustomer/{customerId}")
 	public Customer deleteCustomer(@RequestHeader String token, @PathVariable int customerId) {
 		try {
-			return getService(token).deleteCustomer(customerId);
+			return adminService.deleteCustomer(customerId);
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
@@ -131,7 +118,7 @@ public class AdminController {
 	@GetMapping("/getAllCustomers")
 	public List<Customer> getAllCustomers(@RequestHeader String token) {
 		try {
-			return getService(token).getAllCustomers();
+			return adminService.getAllCustomers();
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}
@@ -140,7 +127,7 @@ public class AdminController {
 	@GetMapping("getCustomer/{customerId}")
 	public Customer getCustomer(@RequestHeader String token, @PathVariable int customerId) {
 		try {
-			Customer customer = getService(token).getOneCustomer(customerId);
+			Customer customer = adminService.getOneCustomer(customerId);
 			return customer;
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
@@ -150,7 +137,7 @@ public class AdminController {
 	@GetMapping("getCustomerCoupons/{customerId}")
 	public List<Coupon> getCustomerCoupons(@RequestHeader String token, @PathVariable int customerId) {
 		try {
-			return getService(token).getCustomerCoupons(customerId);
+			return adminService.getCustomerCoupons(customerId);
 		} catch (DaoException e) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, e.getLocalizedMessage());
 		}

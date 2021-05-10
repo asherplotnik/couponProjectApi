@@ -32,14 +32,9 @@ public class CustomerController {
 
 	private CustomerService getService(String token) throws DaoException {
 		try {
-			if (!jwtUtil.isTokenExpired(token)) {
-				if (jwtUtil.extractUserType(token) == 2) {
-					int id = jwtUtil.extractId(token);
-					customerService.setCustomerId(id);
-					return customerService;
-				}
-			}
-			throw new DaoException("You are not logged in !!!");
+			int id = jwtUtil.extractId(token);
+			customerService.setCustomerId(id);
+			return customerService;
 		} catch (Exception e) {
 			throw new DaoException("You are not logged in !!!");
 		}
