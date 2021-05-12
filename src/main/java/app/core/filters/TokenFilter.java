@@ -29,6 +29,7 @@ public class TokenFilter implements Filter{
 		String token = req.getHeader("token");
 		String acrh = req.getHeader("access-control-request-headers");
 		
+		
 		if(req.getRequestURI().contains("/login")){
 			System.out.println("LOGIN FILTER PASS-------------");
 			chain.doFilter(request, response);
