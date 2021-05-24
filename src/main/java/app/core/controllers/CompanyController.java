@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -70,7 +71,7 @@ public class CompanyController {
 		}
 	}
 
-	@PostMapping("/updateCoupon")
+	@PutMapping("/updateCoupon")
 	public Coupon updateCoupon(@RequestHeader String token, @ModelAttribute Payload payload) {
 		try {
 			return getService(token).updateCoupon(payload);

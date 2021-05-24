@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +43,7 @@ public class AdminController {
 		}
 	}
 
-	@PostMapping("/updateCompany")
+	@PutMapping("/updateCompany")
 	public Company updateCompany(@RequestHeader String token, @RequestBody Company company) {
 		try {
 			return adminService.updateCompany(company);
@@ -51,7 +52,7 @@ public class AdminController {
 		}
 	}
 
-	@PostMapping("/updateCustomer")
+	@PutMapping("/updateCustomer")
 	public Customer updateCustomer(@RequestHeader String token, @RequestBody Customer customer) {
 		try {
 			return adminService.updateCustomer(customer);

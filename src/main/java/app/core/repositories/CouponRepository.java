@@ -36,4 +36,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 	
 	@Query(value = "select coupon.* from coupon left  join  (select c.id from coupon as c left join coupon_customer as cvc on c.id = cvc.coupon_id  where cvc.customer_id = ?1) as f on coupon.id = f.id where f.id is null and coupon.amount > 0 ", nativeQuery = true)
 	List<Coupon> getAvailableCoupons(int id);
+	
+	int deleteByEndDateBefore(LocalDate date);
+	
 }

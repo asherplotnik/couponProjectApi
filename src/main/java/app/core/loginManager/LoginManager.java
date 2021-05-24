@@ -35,7 +35,7 @@ public class LoginManager {
 				return new UserPayload(jwtToken, compName,1);
 			case 2:
 				// login method set customer id if found email and password match
-				String custName = customerService.getCustomerDetails().getFirst_name();
+				String custName = customerService.getCustomerDetails().getFirstName();
 				jwtToken = jwtUtil.generateToken(email, custName, 2, customerService.getCustomerId());
 				return new UserPayload(jwtToken,custName,2);
 			default:

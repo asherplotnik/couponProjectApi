@@ -170,8 +170,8 @@ public class AdminService extends ClientService {
 			if (dupEmailCustomer != null && dupEmailCustomer.getId() != customer.getId()) {
 				throw new DaoException("Customer's email exists already!!!");
 			}
-			customerDb.setFirst_name(customer.getFirst_name());
-			customerDb.setLast_name(customer.getLast_name());
+			customerDb.setFirstName(customer.getFirstName());
+			customerDb.setLastName(customer.getLastName());
 			customerDb.setEmail(customer.getEmail());
 			customerDb.setPassword(customer.getPassword());
 			System.out.println("Customer updated successfuly.");

@@ -30,8 +30,8 @@ public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String first_name;
-	private String last_name;
+	private String firstName;
+	private String lastName;
 	private String email;
 	private String password;
 	@ManyToMany(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
@@ -40,8 +40,8 @@ public class Customer {
 	private List<Coupon> coupons;
 	public Customer(int id, String first_name, String last_name, String email, String password) {
 		this.id = id;
-		this.first_name = first_name;
-		this.last_name = last_name;
+		this.firstName = first_name;
+		this.lastName = last_name;
 		this.email = email;
 		this.password = password;
 		this.coupons = new ArrayList<>();
@@ -70,20 +70,20 @@ public class Customer {
 		this.id = id;
 	}
 
-	public String getFirst_name() {
-		return first_name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setFirst_name(String first_name) {
-		this.first_name = first_name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public String getLast_name() {
-		return last_name;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getEmail() {
@@ -121,9 +121,9 @@ public class Customer {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((first_name == null) ? 0 : first_name.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + id;
-		result = prime * result + ((last_name == null) ? 0 : last_name.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		return result;
 	}
@@ -142,17 +142,17 @@ public class Customer {
 				return false;
 		} else if (!email.equals(other.email))
 			return false;
-		if (first_name == null) {
-			if (other.first_name != null)
+		if (firstName == null) {
+			if (other.firstName != null)
 				return false;
-		} else if (!first_name.equals(other.first_name))
+		} else if (!firstName.equals(other.firstName))
 			return false;
 		if (id != other.id)
 			return false;
-		if (last_name == null) {
-			if (other.last_name != null)
+		if (lastName == null) {
+			if (other.lastName != null)
 				return false;
-		} else if (!last_name.equals(other.last_name))
+		} else if (!lastName.equals(other.lastName))
 			return false;
 		if (password == null) {
 			if (other.password != null)
@@ -164,7 +164,7 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "ID: " + id + " ,FIRST NAME : " + first_name + " , LAST NAME : " + last_name + " , EMAIL: " + email + " , PASSWORD: " + password;
+		return "ID: " + id + " ,FIRST NAME : " + firstName + " , LAST NAME : " + lastName + " , EMAIL: " + email + " , PASSWORD: " + password;
 		
 	}
 	
