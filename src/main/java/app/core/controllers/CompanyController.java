@@ -26,7 +26,7 @@ import app.core.utils.Payload;
 
 @RestController
 @RequestMapping("/api/company")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class CompanyController {
 
 	@Autowired
