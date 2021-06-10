@@ -9,6 +9,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
+
 import app.core.security.JwtUtil;
 
 public class TokenFilter implements Filter{
@@ -29,38 +30,36 @@ public class TokenFilter implements Filter{
 		String token = req.getHeader("token");
 		String acrh = req.getHeader("access-control-request-headers");
 		String url = req.getRequestURI();
-		
-		if(url.contains("/login")){
-			System.out.println("LOGIN FILTER PASS-------------");
-			chain.doFilter(request, response);
-			return;
-		}
-		
+			
 		if (token != null ) {
-			if (jwtUtil.isTokenExpired(token)) {
+			try{
+				jwtUtil.isTokenExpired(token); 
+			} catch(Exception e) {
 				res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not uthorized");
+				return;
 			}
-			if(req.getRequestURI().contains("/admin")) {
-				if(jwtUtil.extractUserType(token)==0) {
+			int userType = jwtUtil.extractUserType(token);
+			if(url.contains("/admin")) {
+				if(userType == 0) {
 					System.out.println("ADMIN FILTER PASS-------------");
-					chain.doFilter(request, response);					
+					chain.doFilter(request, response);
 				} else {
 					System.out.println("ADMIN FILTER FAILL-------------");
 					res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not an admin");
 				}
 				
-			} else if(req.getRequestURI().contains("/company")) {
-				if(jwtUtil.extractUserType(token)==1) {
+			} else if(url.contains("/company")) {
+				if(userType == 1) {
 					System.out.println("COMPANY FILTER PASS-------------");
-					chain.doFilter(request, response);					
+					chain.doFilter(request, response);
 				} else {
 					System.out.println("COMPANY FILTER FAILL-------------");
 					res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not a company");
 				}
-			} else if(req.getRequestURI().contains("/customer")){
-				if(jwtUtil.extractUserType(token)==2) {
+			} else if(url.contains("/customer")){
+				if(userType == 2) {
 					System.out.println("CUSTOMER FILTER PASS-------------");
-					chain.doFilter(request, response);					
+					chain.doFilter(request, response);
 				} else {
 					System.out.println("CUSTOMER FILTER FAILL-------------");
 					res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not a customer");
@@ -68,17 +67,23 @@ public class TokenFilter implements Filter{
 			} else {
 				System.out.println("LOGIN FILTER PASS-------------");
 				chain.doFilter(request, response);
-			}
+			}	
 		} else {
 			if(acrh != null && method.equals("OPTIONS")) {
 		    	System.out.println("PREFLIGHT-------------");
 		    	 res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 		    	 res.setHeader("Access-Control-Allow-Origin", "*");
 		         res.setHeader("Access-Control-Allow-Headers","*");
-		         res.sendError(HttpStatus.OK.value(), "preflight");
+		         res.setStatus(HttpStatus.OK.value());
 		    } else {
-		    	System.out.println("LOGIN FILTER FAILL-------------");
-		    	res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not logged in");
+		    	if (url.contains("/api/")) {
+		    		System.out.println("LOGIN FILTER FAILL-------------");
+		    		res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not logged in");
+		    	} else {
+		    		System.out.println("FILTER PASS-------------");
+		    		chain.doFilter(request, response);	
+		    	}
+		    	
 		    }
 		}
 	}

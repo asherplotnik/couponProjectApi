@@ -111,7 +111,7 @@ public class JwtUtil {
 		return Jwts.builder().setClaims(claims)
 				.setSubject(subject)
 				.setIssuedAt(Date.from(now))
-				.setExpiration(Date.from(now.plus(10, ChronoUnit.HOURS))).signWith(this.decodedSecretKey)
+				.setExpiration(Date.from(now.plus(10, ChronoUnit.MINUTES))).signWith(this.decodedSecretKey)
 				.signWith(decodedSecretKey)
 				.compact();
 	}
