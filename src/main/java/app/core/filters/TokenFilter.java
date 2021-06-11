@@ -34,46 +34,47 @@ public class TokenFilter implements Filter{
 		if (token != null ) {
 			try{
 				jwtUtil.isTokenExpired(token); 
+				int userType = jwtUtil.extractUserType(token);
+				if(url.contains("/admin")) {
+					if(userType == 0) {
+						System.out.println("ADMIN FILTER PASS-------------");
+						chain.doFilter(request, response);
+					} else {
+						System.out.println("ADMIN FILTER FAILL-------------");
+						res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not an admin");
+					}
+					
+				} else if(url.contains("/company")) {
+					if(userType == 1) {
+						System.out.println("COMPANY FILTER PASS-------------");
+						chain.doFilter(request, response);
+					} else {
+						System.out.println("COMPANY FILTER FAILL-------------");
+						res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not a company");
+					}
+				} else if(url.contains("/customer")){
+					if(userType == 2) {
+						System.out.println("CUSTOMER FILTER PASS-------------");
+						chain.doFilter(request, response);
+					} else {
+						System.out.println("CUSTOMER FILTER FAILL-------------");
+						res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not a customer");
+					}
+				} 
 			} catch(Exception e) {
+				res.setHeader("Access-Control-Allow-Origin", "*");
+		        res.setHeader("Access-Control-Allow-Headers","*");
+		        res.setHeader("Access-Control-Expose-Headers","*");
 				res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not uthorized");
-				return;
 			}
-			int userType = jwtUtil.extractUserType(token);
-			if(url.contains("/admin")) {
-				if(userType == 0) {
-					System.out.println("ADMIN FILTER PASS-------------");
-					chain.doFilter(request, response);
-				} else {
-					System.out.println("ADMIN FILTER FAILL-------------");
-					res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not an admin");
-				}
-				
-			} else if(url.contains("/company")) {
-				if(userType == 1) {
-					System.out.println("COMPANY FILTER PASS-------------");
-					chain.doFilter(request, response);
-				} else {
-					System.out.println("COMPANY FILTER FAILL-------------");
-					res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not a company");
-				}
-			} else if(url.contains("/customer")){
-				if(userType == 2) {
-					System.out.println("CUSTOMER FILTER PASS-------------");
-					chain.doFilter(request, response);
-				} else {
-					System.out.println("CUSTOMER FILTER FAILL-------------");
-					res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not a customer");
-				}
-			} else {
-				System.out.println("LOGIN FILTER PASS-------------");
-				chain.doFilter(request, response);
-			}	
+			
 		} else {
 			if(acrh != null && method.equals("OPTIONS")) {
 		    	System.out.println("PREFLIGHT-------------");
 		    	 res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 		    	 res.setHeader("Access-Control-Allow-Origin", "*");
 		         res.setHeader("Access-Control-Allow-Headers","*");
+		         res.setHeader("Access-Control-Expose-Headers","*");
 		         res.setStatus(HttpStatus.OK.value());
 		    } else {
 		    	if (url.contains("/api/")) {
