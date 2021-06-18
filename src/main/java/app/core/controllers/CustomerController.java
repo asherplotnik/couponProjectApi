@@ -17,8 +17,6 @@ import app.core.entities.Coupon;
 import app.core.entities.Customer;
 import app.core.security.JwtUtil;
 import app.core.services.CustomerService;
-//import app.core.sessions.Session;
-//import app.core.sessions.SessionContext;
 
 @RestController
 @RequestMapping("/api/customer")

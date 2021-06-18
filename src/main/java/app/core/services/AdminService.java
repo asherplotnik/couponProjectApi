@@ -3,9 +3,7 @@ package app.core.services;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
-
 import app.core.couponProjectExceptions.DaoException;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
@@ -15,12 +13,6 @@ import app.core.entities.Customer;
 @Transactional
 public class AdminService extends ClientService {
 	private boolean loggedIn = false;
-
-//	public AdminService(String email, String password) throws DaoException {
-//		if (!login(email,password)) {
-//			throw new DaoException("Login admin failed!!!");
-//		}
-//	}
 
 	public AdminService() {
 	}
@@ -71,9 +63,7 @@ public class AdminService extends ClientService {
 
 	public Company deleteCompany(int id) throws DaoException {
 		try {
-			// database foreign key restrictions on delete cascade will automatically delete
-			// all coupons and all purchases
-			// with permission from Eldar
+			
 			Optional<Company> temp = companyRepository.findById(id);
 			if (temp.isEmpty()) {
 				throw new DaoException("failed to delete - company id not found");

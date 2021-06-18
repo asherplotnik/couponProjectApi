@@ -29,12 +29,10 @@ public class LoginManager {
 				jwtToken = jwtUtil.generateToken(email, "Admin", 0, 0);
 				return new UserPayload(jwtToken,"Admin",0);
 			case 1:
-				// login method set company id if found email and password match
 				String compName = companyService.getCompanyDetails().getName();
 				jwtToken = jwtUtil.generateToken(email, compName, 1, companyService.getCompanyId());
 				return new UserPayload(jwtToken, compName,1);
 			case 2:
-				// login method set customer id if found email and password match
 				String custName = customerService.getCustomerDetails().getFirstName();
 				jwtToken = jwtUtil.generateToken(email, custName, 2, customerService.getCustomerId());
 				return new UserPayload(jwtToken,custName,2);
@@ -50,8 +48,10 @@ public class LoginManager {
 		try {
 			if (adminService.login(email, password)) 
 				return 0;
+			// login method set company id if found email and password match
 			if (companyService.login(email, password)) 
 				return 1;
+			// login method set customer id if found email and password match
 			if (customerService.login(email, password)) 
 				return 2;
 			return -1;

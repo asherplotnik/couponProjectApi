@@ -19,10 +19,8 @@ import app.core.couponProjectExceptions.DaoException;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.entities.Customer;
-import app.core.security.JwtUtil;
 import app.core.services.AdminService;
-//import app.core.sessions.Session;
-//import app.core.sessions.SessionContext;
+
 
 @CrossOrigin
 @RestController
@@ -31,9 +29,7 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
-	@Autowired
-	JwtUtil jwtUtil;
-
+	
 	@PostMapping("/addCompany")
 	public Company addCompany(@RequestHeader String token, @RequestBody Company company) {
 		try {

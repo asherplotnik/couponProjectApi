@@ -134,9 +134,6 @@ public class CompanyService extends ClientService {
 	
 	public Coupon deleteCoupon(int id) throws DaoException {
 		try {
-			// database foreign key restrictions on delete cascade will automatically delete
-			// all purchases
-			// with permission of Eldar
 			Optional<Coupon> chkCoupon = couponRepository.findById(id);
 			if (chkCoupon.isPresent() && chkCoupon.get().getCompany().getId() == companyId) {
 				couponRepository.deleteById(id);

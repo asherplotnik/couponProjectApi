@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
-
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import app.core.couponProjectExceptions.DaoException;
