@@ -50,7 +50,7 @@ public class TokenFilter implements Filter{
 					} else {
 						System.out.println("ADMIN FILTER FAILL-------------");
 						setHeaders(res);
-						res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not an admin");
+						res.sendError(HttpStatus.BAD_REQUEST.value(), "you are not an admin");
 					}
 					
 				} else if(url.contains("/company")) {
@@ -60,7 +60,7 @@ public class TokenFilter implements Filter{
 					} else {
 						System.out.println("COMPANY FILTER FAILL-------------");
 						setHeaders(res);
-						res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not a company");
+						res.sendError(HttpStatus.BAD_REQUEST.value(), "you are not a company");
 					}
 				} else if(url.contains("/customer")){
 					if(userType == 2) {
@@ -69,12 +69,12 @@ public class TokenFilter implements Filter{
 					} else {
 						System.out.println("CUSTOMER FILTER FAILL-------------");
 						setHeaders(res);
-						res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not a customer");
+						res.sendError(HttpStatus.BAD_REQUEST.value(), "you are not a customer");
 					}
 				} 
 			} catch(Exception e) {
 				setHeaders(res);
-				res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not uthorized");
+				res.sendError(HttpStatus.BAD_REQUEST.value(), "you are not authorized");
 			}
 			
 		} else {
