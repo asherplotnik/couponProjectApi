@@ -21,6 +21,12 @@ public class TokenFilter implements Filter{
 		this.jwtUtil = jwtUtil;
 	}
 	
+	public void setHeaders(HttpServletResponse res) {
+		res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Headers","*");
+        res.setHeader("Access-Control-Expose-Headers","*");
+	}
+	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
@@ -31,6 +37,7 @@ public class TokenFilter implements Filter{
 		String acrh = req.getHeader("access-control-request-headers");
 		String url = req.getRequestURI();
 			
+		
 		if (token != null ) {
 			try{
 				jwtUtil.isTokenExpired(token); 
@@ -41,6 +48,7 @@ public class TokenFilter implements Filter{
 						chain.doFilter(request, response);
 					} else {
 						System.out.println("ADMIN FILTER FAILL-------------");
+						setHeaders(res);
 						res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not an admin");
 					}
 					
@@ -50,6 +58,7 @@ public class TokenFilter implements Filter{
 						chain.doFilter(request, response);
 					} else {
 						System.out.println("COMPANY FILTER FAILL-------------");
+						setHeaders(res);
 						res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not a company");
 					}
 				} else if(url.contains("/customer")){
@@ -58,13 +67,12 @@ public class TokenFilter implements Filter{
 						chain.doFilter(request, response);
 					} else {
 						System.out.println("CUSTOMER FILTER FAILL-------------");
+						setHeaders(res);
 						res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not a customer");
 					}
 				} 
 			} catch(Exception e) {
-				res.setHeader("Access-Control-Allow-Origin", "*");
-		        res.setHeader("Access-Control-Allow-Headers","*");
-		        res.setHeader("Access-Control-Expose-Headers","*");
+				setHeaders(res);
 				res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not uthorized");
 			}
 			
