@@ -69,7 +69,6 @@ public class TokenFilter implements Filter{
 					} else {
 						System.out.println("CUSTOMER FILTER FAILL-------------");
 						setHeaders(res);
-						res.
 						res.sendError(HttpStatus.UNAUTHORIZED.value(), "you are not a customer");
 					}
 				} 
